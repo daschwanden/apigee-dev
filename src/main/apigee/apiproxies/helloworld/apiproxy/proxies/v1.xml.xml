@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="v1.xml">
+  <Description>v1.xml</Description>
+  <HTTPProxyConnection>
+    <BasePath>/helloworld/v1</BasePath>
+  </HTTPProxyConnection>
+  <RouteRule name="target_backend">
+    <TargetEndpoint>backend</TargetEndpoint>
+  </RouteRule>
+</ProxyEndpoint>

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ProxyEndpoint name="v1.xml">
-  <Description>v1.xml</Description>
+<ProxyEndpoint name="v1">
   <HTTPProxyConnection>
     <BasePath>/helloworld/v1</BasePath>
   </HTTPProxyConnection>

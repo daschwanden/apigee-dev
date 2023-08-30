@@ -1,0 +1,29 @@
+steps:
+- name: gcr.io/proxy-dev-demo/gcloud-slim
+  id: 'Create the API Proxy bundle'
+  entrypoint: 'bash'
+  args: 
+  - '-c'
+  - |
+    # change to the apiproxy
+    cd src/main/apigee/apiproxies/
+    export PROXY=$(ls)
+    cd $$PROXY
+    # create the bundle
+    zip -r $$PROXY.zip .
+    mv $$PROXY.zip /workspace/
+    echo $$PROXY > /workspace/proxy.txt
+- name: gcr.io/proxy-dev-demo/gcloud-slim
+  id: 'Import and Deploy the API Proxy'
+  entrypoint: 'bash'
+  args: 
+  - '-c'
+  - |
+    AUTH="$(gcloud auth print-access-token)"
+    echo $$AUTH
+    export PROXY=$(cat proxy.txt)
+    # import the proxy
+    curl -i -X POST -H "Authorization: Bearer $$AUTH" -H "Content-Type:multipart/form-data" -F "file=@$$PROXY.zip" "https://apigee.googleapis.com/v1/organizations/${_ORG_NAME}/apis?name=$$PROXY&action=import"
+    REV=$(curl -s -H "Authorization: Bearer $$AUTH" -H "Content-Type:multipart/form-data" "https://apigee.googleapis.com/v1/organizations/${_ORG_NAME}/apis/$$PROXY" | jq -r '.revision | last')
+    # deploy the proxy
+    curl -i -H "Authorization: Bearer $$AUTH" -X POST "https://apigee.googleapis.com/v1/organizations/${_ORG_NAME}/environments/${_ENV_NAME}/apis/$$PROXY/revisions/$$REV/deployments?override=true"

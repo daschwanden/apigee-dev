@@ -1,5 +1,5 @@
 <TargetEndpoint name="backend">
   <HTTPTargetConnection>
-    <URL>https://mocktarget.apigee.net</URL>
+    <URL>https://mocktarget.apigee.net/echo</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>
